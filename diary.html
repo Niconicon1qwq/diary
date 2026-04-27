@@ -629,7 +629,7 @@
         html += '<div class="calendar-day empty"></div>';
       }
       for (let day = 1; day <= lastDay.getDate(); day++) {
-        const fullDate = `${calendarYear}年${calendarMonth + 1}月${day}日`;
+        const fullDate = `${calendarYear}/${calendarMonth + 1}/${day}`;
         const hasEntry = entryDates[fullDate] !== undefined;
         const isToday = today.getFullYear() === calendarYear && today.getMonth() === calendarMonth && today.getDate() === day;
         
@@ -661,8 +661,10 @@
     }
 
     function selectDate(dateStr, event) {
+      // Convert "2026年4月27日" to "2026/4/27" for matching
+      const normalizedDateStr = dateStr.replace(/年/g, '/').replace(/月/g, '/').replace(/日/g, '');
       const diaries = getDiaries();
-      const entries = diaries.filter(d => d.date === dateStr);
+      const entries = diaries.filter(d => d.date === normalizedDateStr);
       const entriesDiv = document.getElementById('calendarEntries');
 
       if (entries.length === 0) {
