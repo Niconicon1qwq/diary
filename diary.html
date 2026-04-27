@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#ffb6c1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>小扣日记本 🌸</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+      background: linear-gradient(135deg, #fff5f7 0%, #ffe6ec 100%);
+      min-height: 100vh;
+      color: #5a4a4a;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 2px 15px rgba(255,182,193,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header h1 {
+      color: white;
+      font-size: 22px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .header-date {
+      color: rgba(255,255,255,0.9);
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    /* Write Area */
+    .write-area {
+      margin: 20px 15px;
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(255,182,193,0.3);
+    }
+    .write-area textarea {
+      width: 100%;
+      border: none;
+      resize: none;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #5a4a4a;
+      outline: none;
+      min-height: 120px;
+      font-family: inherit;
+    }
+    .write-area textarea::placeholder {
+      color: #d4a5a5;
+    }
+    .write-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #ffd6dc;
+    }
+    .mood-pick {
+      display: flex;
+      gap: 8px;
+    }
+    .mood-btn {
+      font-size: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .mood-btn:hover, .mood-btn.active {
+      background: #fff5f7;
+      transform: scale(1.2);
+    }
+    .save-btn {
+      background: linear-gradient(135deg, #ffb6c1, #ff9ec0);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(255,182,193,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .save-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Diary List */
+    .diary-list {
+      padding: 0 15px 30px;
+    }
+    .date-group {
+      margin-bottom: 25px;
+    }
+    .date-header {
+      font-size: 14px;
+      color: #d4a5a5;
+      margin-bottom: 12px;
+      padding-left: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .date-header::before {
+      content: '🌸';
+    }
+    .diary-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 15px rgba(255,182,193,0.2);
+      position: relative;
+    }
+    .diary-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .diary-time {
+      font-size: 12px;
+      color: #c9a0a0;
+    }
+    .diary-mood {
+      font-size: 18px;
+    }
+    .diary-content {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #5a4a4a;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .diary-delete {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #ffb6c1;
+      cursor: pointer;
+      font-size: 14px;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .diary-delete:hover {
+      opacity: 1;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #d4a5a5;
+    }
+    .empty-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    /* Add to home screen banner */
+    .install-banner {
+      background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+    }
+    .install-banner.show {
+      display: block;
+    }
+    .install-banner button {
+      background: white;
+      color: #ff9ec0;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      margin-left: 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>小扣日记本 🌸</h1>
+    <div class="header-date" id="today"></div>
+  </div>
+
+  <div class="write-area">
+    <textarea id="diaryInput" placeholder="今天想记录什么呢..."></textarea>
+    <div class="write-footer">
+      <div class="mood-pick">
+        <button class="mood-btn" data-mood="😊">😊</button>
+        <button class="mood-btn" data-mood="🥰">🥰</button>
+        <button class="mood-btn" data-mood="😢">😢</button>
+        <button class="mood-btn" data-mood="😡">😡</button>
+        <button class="mood-btn" data-mood="🤔">🤔</button>
+        <button class="mood-btn" data-mood="😴">😴</button>
+      </div>
+      <button class="save-btn" onclick="saveDiary()">保存 🌸</button>
+    </div>
+  </div>
+
+  <div class="diary-list" id="diaryList"></div>
+
+  <div class="install-banner" id="installBanner">
+    点右上角「…」添加到主屏幕
+    <button onclick="hideBanner()">知道了</button>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'fufu_diary';
+    let selectedMood = null;
+
+    // Mood buttons
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedMood = btn.dataset.mood;
+      });
+    });
+
+    function getDiaries() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    }
+
+    function saveDiaries(diaries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(diaries));
+    }
+
+    function saveDiary() {
+      const content = document.getElementById('diaryInput').value.trim();
+      if (!content) {
+        alert('写点什么吧～');
+        return;
+      }
+
+      const diaries = getDiaries();
+      const now = new Date();
+      diaries.unshift({
+        content,
+        mood: selectedMood || '💭',
+        date: now.toLocaleDateString('zh-CN'),
+        time: now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+        id: Date.now()
+      });
+
+      saveDiaries(diaries);
+      document.getElementById('diaryInput').value = '';
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+      selectedMood = null;
+      renderDiaries();
+      showBanner();
+    }
+
+    function deleteDiary(id) {
+      if (!confirm('确定要删除这篇日记吗？')) return;
+      const diaries = getDiaries().filter(d => d.id !== id);
+      saveDiaries(diaries);
+      renderDiaries();
+    }
+
+    function renderDiaries() {
+      const diaries = getDiaries();
+      const list = document.getElementById('diaryList');
+
+      if (diaries.length === 0) {
+        list.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">📖</div>
+            <div>还没有日记哦</div>
+            <div style="font-size:13px;margin-top:8px;">写下第一篇吧 💕</div>
+          </div>`;
+        return;
+      }
+
+      // Group by date
+      const groups = {};
+      diaries.forEach(d => {
+        if (!groups[d.date]) groups[d.date] = [];
+        groups[d.date].push(d);
+      });
+
+      let html = '';
+      Object.keys(groups).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
+        const items = groups[date];
+        const showDate = date === new Date().toLocaleDateString('zh-CN') ? '今天' :
+                         date === new Date(Date.now() - 86400000).toLocaleDateString('zh-CN') ? '昨天' : date;
+        html += `<div class="date-group">
+          <div class="date-header">${showDate}</div>`;
+        items.forEach(d => {
+          html += `<div class="diary-card">
+            <button class="diary-delete" onclick="deleteDiary(${d.id})">✕</button>
+            <div class="diary-card-header">
+              <span class="diary-time">${d.time}</span>
+              <span class="diary-mood">${d.mood}</span>
+            </div>
+            <div class="diary-content">${escapeHtml(d.content)}</div>
+          </div>`;
+        });
+        html += '</div>';
+      });
+
+      list.innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Show today's date
+    const today = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+    document.getElementById('today').textContent = today;
+
+    // Banner logic
+    function showBanner() {
+      const shown = localStorage.getItem('diary_banner_shown');
+      if (!shown) {
+        document.getElementById('installBanner').classList.add('show');
+      }
+    }
+    function hideBanner() {
+      document.getElementById('installBanner').classList.remove('show');
+      localStorage.setItem('diary_banner_shown', '1');
+    }
+
+    renderDiaries();
+  </script>
+</body>
+</html>
