@@ -24,27 +24,272 @@
     /* Header */
     .header {
       background: linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 100%);
-      padding: 25px 20px;
+      padding: 20px;
       text-align: center;
       box-shadow: 0 2px 15px rgba(255,182,193,0.5);
       position: sticky;
       top: 0;
       z-index: 100;
     }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .header h1 {
       color: white;
-      font-size: 22px;
+      font-size: 20px;
       text-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    .header-date {
-      color: rgba(255,255,255,0.9);
+    .view-toggle {
+      background: rgba(255,255,255,0.3);
+      border: none;
+      border-radius: 20px;
+      padding: 8px 15px;
+      color: white;
       font-size: 13px;
-      margin-top: 5px;
+      cursor: pointer;
     }
 
-    /* Write Area */
+    /* Content */
+    .content {
+      padding: 20px 15px 100px;
+    }
+
+    /* List View */
+    .diary-list {
+      display: none;
+    }
+    .diary-list.show {
+      display: block;
+    }
+    .diary-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 15px rgba(255,182,193,0.2);
+      position: relative;
+    }
+    .diary-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .diary-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #5a4a4a;
+    }
+    .diary-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .diary-date {
+      font-size: 12px;
+      color: #c9a0a0;
+    }
+    .diary-mood {
+      font-size: 18px;
+    }
+    .diary-toggle {
+      font-size: 16px;
+      color: #ffb6c1;
+      transition: transform 0.3s;
+    }
+    .diary-card.open .diary-toggle {
+      transform: rotate(180deg);
+    }
+    .diary-content-wrapper {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #ffd6dc;
+    }
+    .diary-card.open .diary-content-wrapper {
+      display: block;
+    }
+    .diary-content {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #5a4a4a;
+      white-space: pre-wrap;
+    }
+    .diary-delete {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #ffb6c1;
+      cursor: pointer;
+      font-size: 14px;
+      opacity: 0.5;
+    }
+    .diary-card.open .diary-delete {
+      opacity: 1;
+    }
+
+    /* Calendar View */
+    .calendar-view {
+      display: none;
+    }
+    .calendar-view.show {
+      display: block;
+    }
+    .calendar-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .calendar-nav button {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .calendar-month {
+      font-size: 16px;
+      font-weight: 600;
+      color: #5a4a4a;
+    }
+    .calendar-grid {
+      background: white;
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 3px 15px rgba(255,182,193,0.2);
+    }
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 12px;
+      color: #d4a5a5;
+      margin-bottom: 10px;
+    }
+    .calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+    }
+    .calendar-day.empty {
+      cursor: default;
+    }
+    .calendar-day.has-entry {
+      background: #ffe6ec;
+      color: #ff9ec0;
+      font-weight: 600;
+    }
+    .calendar-day.has-entry::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #ff6b9d;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 4px;
+    }
+    .calendar-day.today {
+      border: 2px solid #ff9ec0;
+    }
+    .calendar-day.selected {
+      background: #ffb6c1;
+      color: white;
+    }
+    .calendar-day.selected::after {
+      background: white;
+    }
+
+    .calendar-entries {
+      margin-top: 20px;
+    }
+    .calendar-entry-date {
+      font-size: 14px;
+      color: #d4a5a5;
+      margin-bottom: 10px;
+      padding-left: 5px;
+    }
+    .entry-card {
+      background: white;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 10px rgba(255,182,193,0.2);
+      cursor: pointer;
+    }
+    .entry-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #5a4a4a;
+    }
+    .entry-card-meta {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 12px;
+      color: #c9a0a0;
+    }
+
+    /* FAB */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #ffb6c1, #ff9ec0);
+      border: none;
+      border-radius: 50%;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255,182,193,0.6);
+      z-index: 99;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fab:active {
+      transform: scale(0.95);
+    }
+
+    /* Write View */
+    .write-view {
+      display: none;
+      padding: 20px 15px;
+    }
+    .write-view.show {
+      display: block;
+    }
+    .write-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: #ff9ec0;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
     .write-area {
-      margin: 20px 15px;
       background: white;
       border-radius: 20px;
       padding: 20px;
@@ -61,7 +306,7 @@
       margin-bottom: 15px;
       background: transparent;
     }
-    .write-area input[type="text"]::placeholder {
+    .write-area input::placeholder {
       color: #d4a5a5;
     }
     .write-area textarea {
@@ -72,7 +317,7 @@
       line-height: 1.8;
       color: #5a4a4a;
       outline: none;
-      min-height: 100px;
+      min-height: 200px;
       font-family: inherit;
       background: transparent;
     }
@@ -109,108 +354,14 @@
       background: linear-gradient(135deg, #ffb6c1, #ff9ec0);
       color: white;
       border: none;
-      padding: 10px 25px;
+      padding: 12px 30px;
       border-radius: 25px;
       font-size: 15px;
       cursor: pointer;
       box-shadow: 0 3px 10px rgba(255,182,193,0.5);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .save-btn:active {
-      transform: scale(0.96);
     }
 
-    /* Diary List */
-    .diary-list {
-      padding: 0 15px 30px;
-    }
-    .date-group {
-      margin-bottom: 25px;
-    }
-    .date-header {
-      font-size: 14px;
-      color: #d4a5a5;
-      margin-bottom: 12px;
-      padding-left: 5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .diary-card {
-      background: white;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 12px;
-      box-shadow: 0 3px 15px rgba(255,182,193,0.2);
-      position: relative;
-    }
-    .diary-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-    .diary-title-row {
-      flex: 1;
-    }
-    .diary-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #5a4a4a;
-    }
-    .diary-time {
-      font-size: 12px;
-      color: #c9a0a0;
-      margin-top: 3px;
-    }
-    .diary-mood {
-      font-size: 22px;
-      margin-left: 12px;
-    }
-    .diary-toggle {
-      font-size: 18px;
-      color: #ffb6c1;
-      margin-left: 10px;
-      transition: transform 0.3s;
-    }
-    .diary-card.open .diary-toggle {
-      transform: rotate(180deg);
-    }
-    .diary-content-wrapper {
-      display: none;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px dashed #ffd6dc;
-    }
-    .diary-card.open .diary-content-wrapper {
-      display: block;
-    }
-    .diary-content {
-      font-size: 15px;
-      line-height: 1.8;
-      color: #5a4a4a;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .diary-delete {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: none;
-      border: none;
-      color: #ffb6c1;
-      cursor: pointer;
-      font-size: 14px;
-      opacity: 0.5;
-      transition: opacity 0.2s;
-    }
-    .diary-delete:hover {
-      opacity: 1;
-    }
-    .diary-card.open .diary-delete {
-      opacity: 1;
-    }
-
+    /* Empty */
     .empty {
       text-align: center;
       padding: 60px 20px;
@@ -221,69 +372,174 @@
       margin-bottom: 15px;
     }
 
-    /* Install banner */
-    .install-banner {
-      background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
-      color: white;
-      padding: 15px 20px;
-      text-align: center;
-      font-size: 14px;
+    /* Detail Modal */
+    .detail-modal {
       display: none;
       position: fixed;
-      bottom: 0;
+      top: 0;
       left: 0;
       right: 0;
-      box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+      bottom: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 200;
+      justify-content: center;
+      align-items: flex-end;
     }
-    .install-banner.show {
-      display: block;
+    .detail-modal.show {
+      display: flex;
     }
-    .install-banner button {
+    .detail-content {
       background: white;
-      color: #ff9ec0;
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 20px 20px 0 0;
+      padding: 25px 20px;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .detail-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #5a4a4a;
+    }
+    .detail-close {
+      background: none;
       border: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      margin-left: 10px;
-      font-size: 13px;
+      font-size: 24px;
+      color: #d4a5a5;
       cursor: pointer;
+    }
+    .detail-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      color: #c9a0a0;
+      margin-bottom: 15px;
+    }
+    .detail-mood {
+      font-size: 20px;
+    }
+    .detail-body {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #5a4a4a;
+      white-space: pre-wrap;
+    }
+    .detail-delete {
+      background: #ffe6ec;
+      color: #ff6b9d;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>小扣日记本 🌸</h1>
-    <div class="header-date" id="today"></div>
-  </div>
-
-  <div class="write-area">
-    <input type="text" id="titleInput" placeholder="标题（选填）" maxlength="50">
-    <textarea id="diaryInput" placeholder="今天想记录什么呢..."></textarea>
-    <div class="write-footer">
-      <div class="mood-pick">
-        <button class="mood-btn" data-mood="😊">😊</button>
-        <button class="mood-btn" data-mood="🥰">🥰</button>
-        <button class="mood-btn" data-mood="😢">😢</button>
-        <button class="mood-btn" data-mood="😡">😡</button>
-        <button class="mood-btn" data-mood="🤔">🤔</button>
-        <button class="mood-btn" data-mood="😴">😴</button>
+  <!-- Main View -->
+  <div id="mainView">
+    <div class="header">
+      <div class="header-top">
+        <h1>小扣日记本 🌸</h1>
+        <button class="view-toggle" id="viewToggle" onclick="toggleView()">
+          <span id="toggleText">日历</span>
+        </button>
       </div>
-      <button class="save-btn" onclick="saveDiary()">保存 🌸</button>
+    </div>
+
+    <!-- List View -->
+    <div class="content">
+      <div class="diary-list show" id="listView">
+        <div id="listContent"></div>
+      </div>
+
+      <!-- Calendar View -->
+      <div class="calendar-view" id="calendarView">
+        <div class="calendar-nav">
+          <button onclick="changeMonth(-1)">◀</button>
+          <span class="calendar-month" id="calendarMonth"></span>
+          <button onclick="changeMonth(1)">▶</button>
+        </div>
+        <div class="calendar-grid">
+          <div class="calendar-weekdays">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+          <div class="calendar-days" id="calendarDays"></div>
+        </div>
+        <div class="calendar-entries" id="calendarEntries"></div>
+      </div>
     </div>
   </div>
 
-  <div class="diary-list" id="diaryList"></div>
+  <!-- FAB -->
+  <button class="fab" onclick="showWrite()">+</button>
 
-  <div class="install-banner" id="installBanner">
-    点右上角「…」添加到主屏幕
-    <button onclick="hideBanner()">知道了</button>
+  <!-- Write View -->
+  <div class="write-view" id="writeView">
+    <button class="write-back" onclick="hideWrite()">◀ 返回</button>
+    <div class="write-area">
+      <input type="text" id="titleInput" placeholder="标题（选填）" maxlength="50">
+      <textarea id="diaryInput" placeholder="今天想记录什么呢..."></textarea>
+      <div class="write-footer">
+        <div class="mood-pick">
+          <button class="mood-btn" data-mood="😊">😊</button>
+          <button class="mood-btn" data-mood="🥰">🥰</button>
+          <button class="mood-btn" data-mood="😢">😢</button>
+          <button class="mood-btn" data-mood="😡">😡</button>
+          <button class="mood-btn" data-mood="🤔">🤔</button>
+          <button class="mood-btn" data-mood="😴">😴</button>
+        </div>
+        <button class="save-btn" onclick="saveDiary()">保存 🌸</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-content">
+      <div class="detail-header">
+        <span class="detail-title" id="detailTitle"></span>
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+      </div>
+      <div class="detail-meta">
+        <span id="detailDate"></span>
+        <span id="detailTime"></span>
+        <span class="detail-mood" id="detailMood"></span>
+      </div>
+      <div class="detail-body" id="detailBody"></div>
+      <button class="detail-delete" onclick="deleteFromDetail()">删除日记</button>
+    </div>
   </div>
 
   <script>
     const STORAGE_KEY = 'fufu_diary';
     let selectedMood = null;
+    let currentView = 'list';
+    let calendarYear = new Date().getFullYear();
+    let calendarMonth = new Date().getMonth();
+    let selectedEntryId = null;
 
-    // Mood buttons
+    function getDiaries() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    }
+
+    function saveDiaries(diaries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(diaries));
+    }
+
     document.querySelectorAll('.mood-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
@@ -292,12 +548,197 @@
       });
     });
 
-    function getDiaries() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    function toggleView() {
+      const listView = document.getElementById('listView');
+      const calendarView = document.getElementById('calendarView');
+      const toggleText = document.getElementById('toggleText');
+
+      if (currentView === 'list') {
+        currentView = 'calendar';
+        listView.classList.remove('show');
+        calendarView.classList.add('show');
+        toggleText.textContent = '列表';
+        renderCalendar();
+      } else {
+        currentView = 'list';
+        listView.classList.add('show');
+        calendarView.classList.remove('show');
+        toggleText.textContent = '日历';
+        renderList();
+      }
     }
 
-    function saveDiaries(diaries) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(diaries));
+    function renderList() {
+      const diaries = getDiaries();
+      const content = document.getElementById('listContent');
+
+      if (diaries.length === 0) {
+        content.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">📖</div>
+            <div>还没有日记哦</div>
+            <div style="font-size:13px;margin-top:8px;">点右下角+写一篇吧 💕</div>
+          </div>`;
+        return;
+      }
+
+      content.innerHTML = diaries.map(d => `
+        <div class="diary-card" onclick="toggleCard(this, event)">
+          <button class="diary-delete" onclick="deleteDiary(${d.id}, event)">✕</button>
+          <div class="diary-card-header">
+            <div>
+              <div class="diary-title">${escapeHtml(d.title)}</div>
+              <div class="diary-meta">
+                <span class="diary-date">${d.date} ${d.time}</span>
+                <span class="diary-mood">${d.mood}</span>
+              </div>
+            </div>
+            <span class="diary-toggle">▼</span>
+          </div>
+          <div class="diary-content-wrapper">
+            <div class="diary-content">${escapeHtml(d.content)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCard(card, event) {
+      if (event.target.classList.contains('diary-delete')) return;
+      card.classList.toggle('open');
+    }
+
+    function renderCalendar() {
+      const diaries = getDiaries();
+      const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      document.getElementById('calendarMonth').textContent = `${calendarYear}年 ${monthNames[calendarMonth]}`;
+
+      const entryDates = {};
+      diaries.forEach(d => {
+        if (!entryDates[d.date]) entryDates[d.date] = [];
+        entryDates[d.date].push(d);
+      });
+
+      const firstDay = new Date(calendarYear, calendarMonth, 1);
+      const lastDay = new Date(calendarYear, calendarMonth + 1, 0);
+      const startWeekday = firstDay.getDay();
+      const today = new Date();
+
+      let html = '';
+      for (let i = 0; i < startWeekday; i++) {
+        html += '<div class="calendar-day empty"></div>';
+      }
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const fullDate = `${calendarYear}年${calendarMonth + 1}月${day}日`;
+        const hasEntry = entryDates[fullDate] !== undefined;
+        const isToday = today.getFullYear() === calendarYear && today.getMonth() === calendarMonth && today.getDate() === day;
+        
+        let classes = 'calendar-day';
+        if (hasEntry) classes += ' has-entry';
+        if (isToday) classes += ' today';
+        
+        html += `<div class="${classes}" onclick="selectDate('${fullDate}', event)">${day}</div>`;
+      }
+      document.getElementById('calendarDays').innerHTML = html;
+      
+      document.getElementById('calendarEntries').innerHTML = `
+        <div style="text-align:center;color:#d4a5a5;padding:20px;font-size:14px;">
+          点击某天查看日记 📅
+        </div>
+      `;
+    }
+
+    function changeMonth(delta) {
+      calendarMonth += delta;
+      if (calendarMonth > 11) {
+        calendarMonth = 0;
+        calendarYear++;
+      } else if (calendarMonth < 0) {
+        calendarMonth = 11;
+        calendarYear--;
+      }
+      renderCalendar();
+    }
+
+    function selectDate(dateStr, event) {
+      const diaries = getDiaries();
+      const entries = diaries.filter(d => d.date === dateStr);
+      const entriesDiv = document.getElementById('calendarEntries');
+
+      if (entries.length === 0) {
+        entriesDiv.innerHTML = `
+          <div class="calendar-entry-date">${dateStr}</div>
+          <div style="text-align:center;color:#d4a5a5;padding:20px;font-size:14px;">
+            这一天没有日记 🌸
+          </div>`;
+      } else {
+        entriesDiv.innerHTML = `
+          <div class="calendar-entry-date">${dateStr}</div>
+          ${entries.map(d => `
+            <div class="entry-card" onclick="showDetail(${d.id})">
+              <div class="entry-card-title">${escapeHtml(d.title)}</div>
+              <div class="entry-card-meta">
+                <span>${d.time}</span>
+                <span>${d.mood}</span>
+              </div>
+            </div>
+          `).join('')}`;
+      }
+
+      document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+      event.target.classList.add('selected');
+    }
+
+    function showDetail(id) {
+      const diaries = getDiaries();
+      const diary = diaries.find(d => d.id === id);
+      if (!diary) return;
+
+      selectedEntryId = id;
+      document.getElementById('detailTitle').textContent = diary.title;
+      document.getElementById('detailDate').textContent = diary.date;
+      document.getElementById('detailTime').textContent = diary.time;
+      document.getElementById('detailMood').textContent = diary.mood;
+      document.getElementById('detailBody').textContent = diary.content;
+      document.getElementById('detailModal').classList.add('show');
+    }
+
+    function closeDetail() {
+      document.getElementById('detailModal').classList.remove('show');
+    }
+
+    function deleteFromDetail() {
+      if (!confirm('确定要删除这篇日记吗？')) return;
+      const diaries = getDiaries().filter(d => d.id !== selectedEntryId);
+      saveDiaries(diaries);
+      closeDetail();
+      if (currentView === 'list') {
+        renderList();
+      } else {
+        renderCalendar();
+      }
+    }
+
+    function deleteDiary(id, event) {
+      event.stopPropagation();
+      if (!confirm('确定要删除这篇日记吗？')) return;
+      const diaries = getDiaries().filter(d => d.id !== id);
+      saveDiaries(diaries);
+      renderList();
+    }
+
+    function showWrite() {
+      document.getElementById('mainView').style.display = 'none';
+      document.getElementById('writeView').classList.add('show');
+      document.getElementById('titleInput').focus();
+    }
+
+    function hideWrite() {
+      document.getElementById('mainView').style.display = 'block';
+      document.getElementById('writeView').classList.remove('show');
+      document.getElementById('titleInput').value = '';
+      document.getElementById('diaryInput').value = '';
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+      selectedMood = null;
     }
 
     function saveDiary() {
@@ -320,75 +761,13 @@
       });
 
       saveDiaries(diaries);
-      document.getElementById('titleInput').value = '';
-      document.getElementById('diaryInput').value = '';
-      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-      selectedMood = null;
-      renderDiaries();
-      showBanner();
-    }
-
-    function deleteDiary(id, event) {
-      event.stopPropagation();
-      if (!confirm('确定要删除这篇日记吗？')) return;
-      const diaries = getDiaries().filter(d => d.id !== id);
-      saveDiaries(diaries);
-      renderDiaries();
-    }
-
-    function toggleDiary(card, event) {
-      if (event.target.classList.contains('diary-delete')) return;
-      card.classList.toggle('open');
-    }
-
-    function renderDiaries() {
-      const diaries = getDiaries();
-      const list = document.getElementById('diaryList');
-
-      if (diaries.length === 0) {
-        list.innerHTML = `
-          <div class="empty">
-            <div class="empty-icon">📖</div>
-            <div>还没有日记哦</div>
-            <div style="font-size:13px;margin-top:8px;">写下第一篇吧 💕</div>
-          </div>`;
-        return;
+      hideWrite();
+      
+      if (currentView === 'list') {
+        renderList();
+      } else {
+        renderCalendar();
       }
-
-      // Group by date
-      const groups = {};
-      diaries.forEach(d => {
-        if (!groups[d.date]) groups[d.date] = [];
-        groups[d.date].push(d);
-      });
-
-      let html = '';
-      Object.keys(groups).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
-        const items = groups[date];
-        const showDate = date === new Date().toLocaleDateString('zh-CN') ? '今天' :
-                         date === new Date(Date.now() - 86400000).toLocaleDateString('zh-CN') ? '昨天' : date;
-        html += `<div class="date-group">
-          <div class="date-header">${showDate}</div>`;
-        items.forEach(d => {
-          html += `<div class="diary-card" onclick="toggleDiary(this, event)">
-            <button class="diary-delete" onclick="deleteDiary(${d.id}, event)">✕</button>
-            <div class="diary-header">
-              <div class="diary-title-row">
-                <div class="diary-title">${escapeHtml(d.title)}</div>
-                <div class="diary-time">${d.time}</div>
-              </div>
-              <span class="diary-mood">${d.mood}</span>
-              <span class="diary-toggle">▼</span>
-            </div>
-            <div class="diary-content-wrapper">
-              <div class="diary-content">${escapeHtml(d.content)}</div>
-            </div>
-          </div>`;
-        });
-        html += '</div>';
-      });
-
-      list.innerHTML = html;
     }
 
     function escapeHtml(text) {
@@ -397,23 +776,7 @@
       return div.innerHTML;
     }
 
-    // Show today's date
-    const today = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-    document.getElementById('today').textContent = today;
-
-    // Banner logic
-    function showBanner() {
-      const shown = localStorage.getItem('diary_banner_shown');
-      if (!shown) {
-        document.getElementById('installBanner').classList.add('show');
-      }
-    }
-    function hideBanner() {
-      document.getElementById('installBanner').classList.remove('show');
-      localStorage.setItem('diary_banner_shown', '1');
-    }
-
-    renderDiaries();
+    renderList();
   </script>
 </body>
 </html>
