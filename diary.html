@@ -50,6 +50,20 @@
       padding: 20px;
       box-shadow: 0 4px 20px rgba(255,182,193,0.3);
     }
+    .write-area input[type="text"] {
+      width: 100%;
+      border: none;
+      border-bottom: 1px dashed #ffd6dc;
+      padding: 8px 0;
+      font-size: 16px;
+      color: #5a4a4a;
+      outline: none;
+      margin-bottom: 15px;
+      background: transparent;
+    }
+    .write-area input[type="text"]::placeholder {
+      color: #d4a5a5;
+    }
     .write-area textarea {
       width: 100%;
       border: none;
@@ -58,8 +72,9 @@
       line-height: 1.8;
       color: #5a4a4a;
       outline: none;
-      min-height: 120px;
+      min-height: 100px;
       font-family: inherit;
+      background: transparent;
     }
     .write-area textarea::placeholder {
       color: #d4a5a5;
@@ -121,9 +136,6 @@
       align-items: center;
       gap: 8px;
     }
-    .date-header::before {
-      content: '🌸';
-    }
     .diary-card {
       background: white;
       border-radius: 16px;
@@ -132,18 +144,46 @@
       box-shadow: 0 3px 15px rgba(255,182,193,0.2);
       position: relative;
     }
-    .diary-card-header {
+    .diary-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .diary-title-row {
+      flex: 1;
+    }
+    .diary-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #5a4a4a;
     }
     .diary-time {
       font-size: 12px;
       color: #c9a0a0;
+      margin-top: 3px;
     }
     .diary-mood {
+      font-size: 22px;
+      margin-left: 12px;
+    }
+    .diary-toggle {
       font-size: 18px;
+      color: #ffb6c1;
+      margin-left: 10px;
+      transition: transform 0.3s;
+    }
+    .diary-card.open .diary-toggle {
+      transform: rotate(180deg);
+    }
+    .diary-content-wrapper {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #ffd6dc;
+    }
+    .diary-card.open .diary-content-wrapper {
+      display: block;
     }
     .diary-content {
       font-size: 15px;
@@ -167,6 +207,9 @@
     .diary-delete:hover {
       opacity: 1;
     }
+    .diary-card.open .diary-delete {
+      opacity: 1;
+    }
 
     .empty {
       text-align: center;
@@ -178,7 +221,7 @@
       margin-bottom: 15px;
     }
 
-    /* Add to home screen banner */
+    /* Install banner */
     .install-banner {
       background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
       color: white;
@@ -214,6 +257,7 @@
   </div>
 
   <div class="write-area">
+    <input type="text" id="titleInput" placeholder="标题（选填）" maxlength="50">
     <textarea id="diaryInput" placeholder="今天想记录什么呢..."></textarea>
     <div class="write-footer">
       <div class="mood-pick">
@@ -263,9 +307,11 @@
         return;
       }
 
+      const title = document.getElementById('titleInput').value.trim();
       const diaries = getDiaries();
       const now = new Date();
       diaries.unshift({
+        title: title || '无标题',
         content,
         mood: selectedMood || '💭',
         date: now.toLocaleDateString('zh-CN'),
@@ -274,6 +320,7 @@
       });
 
       saveDiaries(diaries);
+      document.getElementById('titleInput').value = '';
       document.getElementById('diaryInput').value = '';
       document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
       selectedMood = null;
@@ -281,11 +328,17 @@
       showBanner();
     }
 
-    function deleteDiary(id) {
+    function deleteDiary(id, event) {
+      event.stopPropagation();
       if (!confirm('确定要删除这篇日记吗？')) return;
       const diaries = getDiaries().filter(d => d.id !== id);
       saveDiaries(diaries);
       renderDiaries();
+    }
+
+    function toggleDiary(card, event) {
+      if (event.target.classList.contains('diary-delete')) return;
+      card.classList.toggle('open');
     }
 
     function renderDiaries() {
@@ -317,13 +370,19 @@
         html += `<div class="date-group">
           <div class="date-header">${showDate}</div>`;
         items.forEach(d => {
-          html += `<div class="diary-card">
-            <button class="diary-delete" onclick="deleteDiary(${d.id})">✕</button>
-            <div class="diary-card-header">
-              <span class="diary-time">${d.time}</span>
+          html += `<div class="diary-card" onclick="toggleDiary(this, event)">
+            <button class="diary-delete" onclick="deleteDiary(${d.id}, event)">✕</button>
+            <div class="diary-header">
+              <div class="diary-title-row">
+                <div class="diary-title">${escapeHtml(d.title)}</div>
+                <div class="diary-time">${d.time}</div>
+              </div>
               <span class="diary-mood">${d.mood}</span>
+              <span class="diary-toggle">▼</span>
             </div>
-            <div class="diary-content">${escapeHtml(d.content)}</div>
+            <div class="diary-content-wrapper">
+              <div class="diary-content">${escapeHtml(d.content)}</div>
+            </div>
           </div>`;
         });
         html += '</div>';
